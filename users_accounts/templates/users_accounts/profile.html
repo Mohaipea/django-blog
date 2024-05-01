@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    {{ user.username }}
+    {{ name }}
+    {{ user.email }}
+    <a href="{% url 'edit-profile' %}">ویرایش اطلاعات</a>
+{% endblock %}

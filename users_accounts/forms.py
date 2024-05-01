@@ -27,3 +27,9 @@ class RegistrationForm(UserCreationForm):
         if password1 != password2:
             raise forms.ValidationError('passwords do not match')
         return password2
+
+
+class EditProfileForm(forms.ModelForm):
+    class Meta:
+        model = get_user_model()
+        fields = ['first_name', 'last_name', 'username', 'email']

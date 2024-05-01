@@ -1,9 +1,9 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import Http404
 from django.shortcuts import render, redirect
-
-from users_accounts.forms import RegistrationForm
+from .forms import RegistrationForm, EditProfileForm
 
 
 def loginPage(request):
@@ -36,3 +36,23 @@ def registerPage(request):
 def logoutPage(request):
     logout(request)
     return redirect('home')
+
+
+@login_required(login_url='login')
+def profilePage(request):
+    user = User.objects.get(id=request.user.id)
+    name = user.get_full_name()
+    context = {'user': user, 'name': name}
+    return render(request, 'users_accounts/profile.html', context)
+
+
+def editProfilePage(request):
+    user = User.objects.get(id=request.user.id)
+    form = EditProfileForm(request.POST or None, instance=user)
+    if form.is_valid():
+        form.save()
+        return redirect('profile')
+
+    context = {'form': form, 'user': user}
+
+    return render(request, 'users_accounts/edit_profile.html', context)
