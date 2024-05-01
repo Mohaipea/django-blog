@@ -23,10 +23,9 @@ def loginPage(request):
 def registerPage(request):
     regisetr_form = RegistrationForm(request.POST or None)
     if regisetr_form.is_valid():
-        username = regisetr_form.cleaned_data.get('username')
-        email = regisetr_form.cleaned_data.get('email')
-        password = regisetr_form.cleaned_data.get('password')
-        user = User.objects.create_user(username, email, password)
+        user = regisetr_form.save(commit=False)
+        user.username = regisetr_form.cleaned_data.get('username')
+        user.save()
         login(request, user)
         return redirect('home')
 

@@ -1,27 +1,13 @@
 from django import forms
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
 
 
-class RegistrationForm(forms.Form):
-    username = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': 'نام کاربری'}),
-        label='نام کاربری'
-    )
-
-    email = forms.EmailField(
-        widget=forms.EmailInput(attrs={'placeholder': 'ایمیل'}),
-        label='ایمیل'
-    )
-
-    password1 = forms.CharField(
-        widget=forms.PasswordInput(attrs={'placeholder': 'کلمه عبور'}),
-        label='کلمه ی عبور'
-    )
-
-    password2 = forms.CharField(
-        widget=forms.PasswordInput(attrs={'placeholder': 'تکرار کلمه عبور'}),
-        label='تکرار کلمه عبور'
-    )
+class RegistrationForm(UserCreationForm):
+    class Meta:
+        model = get_user_model()
+        fields = ['first_name', 'last_name', 'username', 'email', 'password1', 'password2']
 
     def clean_username(self):
         username = self.cleaned_data.get('username')

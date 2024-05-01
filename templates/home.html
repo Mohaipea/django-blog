@@ -3,8 +3,9 @@
 {% block content %}
     <h1>home page</h1>
     {% if request.user.is_authenticated %}
+        {{ request.user.username }}
         <a href="{% url 'logout' %}">logout</a>
     {% else %}
-        {{ request.user.username }}
+        
     {% endif %}
 {% endblock %}
