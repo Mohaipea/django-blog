@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .room-container {
+            display: grid;
+            grid-template-columns: 3fr 1fr;
+        }
+
+        ul li {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+{% extends 'main.html' %}
+
+{% block content %}
+<div class="room-container">
+
+
+    <div>
+        <ul>
+            <li><h1>{{room.name}}</h1></li>
+            <li><h2>{{room.description}}</h2></li>
+            <li><h5>{{room.updated}}</h5></li>
+        </ul>
+        <p>conversation</p>
+        {% for message in room_messages %}
+        <div>
+            <small>@{{message.user}} {{message.created|timesince}} ago</small>
+            <div>
+                {{message.body}}
+            </div>
+            {% if request.user == message.user %}
+            <small><a href="{% url 'delete-message' message.id %}">delete this comment</a></small>
+            {% endif %}
+
+        </div>
+        {% endfor %}
+
+        <div>
+            {% if request.user.is_authenticated %}
+            <form method="POST" action="">
+                {% csrf_token %}
+                <input type="text" name="body" placeholder="write your message here...">
+            </form>
+            {% endif %}
+        </div>
+    </div>
+<div>
+    <h3>participants</h3>
+
+    <hr>
+    {% for p in participants %}
+    <div>
+        <p>@{{p.username}}</p>
+    </div>
+    {% endfor %}
+</div>
+</div>
+
+
+{% endblock %}
+</body>
+</html>
